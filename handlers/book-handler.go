@@ -12,6 +12,8 @@ import (
 
 	"github.com/cacawildaandika/go-gin-gorm-example/dtos"
 
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -54,6 +56,31 @@ func CreateBook(c *gin.Context) {
 	if response.Error != nil {
 		c.JSON(http.StatusInternalServerError, response)
 	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func GetBookById(c *gin.Context) {
+	db, ok := c.MustGet("databaseConnection").(*gorm.DB)
+	if !ok {
+		panic("Can't connect to database")
+	}
+
+	bookRepository := repositories.NewBookrepository(db)
+
+	id := c.Param("id")
+
+	idUint, err := strconv.ParseUint(id, 10, 64)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dtos.Response{
+			Status:  "Error",
+			Error:   err,
+			Message: "Invalid params. Please give numbers",
+		})
+	}
+
+	response := services.GetById(uint(idUint), *bookRepository)
 
 	c.JSON(http.StatusOK, response)
 }

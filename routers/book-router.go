@@ -10,5 +10,6 @@ func InitializeBookRouter(rg *gin.RouterGroup) {
 	bookRouter := rg.Group("/book")
 
 	bookRouter.GET("/", handlers.GetAllBooks)
+	bookRouter.GET("/:id", handlers.GetBookById)
 	bookRouter.POST("/", handlers.CreateBook)
 }

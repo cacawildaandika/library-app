@@ -29,3 +29,15 @@ func (bookRepository *BookRepository) FindAll() *models.Books {
 
 	return &books
 }
+
+func (bookRepository *BookRepository) FindOne(id uint) (error, *models.Book) {
+	var book models.Book
+
+	err := bookRepository.db.Take(&book, id).Error
+
+	if err != nil {
+		return err, nil
+	}
+
+	return nil, &book
+}

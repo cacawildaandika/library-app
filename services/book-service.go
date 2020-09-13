@@ -32,3 +32,21 @@ func GetAllBooks(bookRepository repositories.BookRepository) dtos.Response {
 		Message: "Success get all books",
 	}
 }
+
+func GetById(id uint, bookRepository repositories.BookRepository) dtos.Response {
+	err, result := bookRepository.FindOne(id)
+
+	if err != nil {
+		return dtos.Response{
+			Status:  "Error",
+			Error:   err.Error(),
+			Message: "Failed get book",
+		}
+	}
+
+	return dtos.Response{
+		Status:  "Ok",
+		Data:    result,
+		Message: "Success get book",
+	}
+}
