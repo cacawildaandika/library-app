@@ -22,3 +22,13 @@ func CreateBook(book *models.Book, bookRepository repositories.BookRepository) d
 		Message: "Success create a book",
 	}
 }
+
+func GetAllBooks(bookRepository repositories.BookRepository) dtos.Response {
+	datas := bookRepository.FindAll()
+
+	return dtos.Response{
+		Status:  "Ok",
+		Data:    datas,
+		Message: "Success get all books",
+	}
+}

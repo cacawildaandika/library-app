@@ -22,3 +22,10 @@ func (bookRepository *BookRepository) Save(book *models.Book) (error, *models.Bo
 
 	return nil, book
 }
+
+func (bookRepository *BookRepository) FindAll() *models.Books {
+	var books models.Books
+	bookRepository.db.Find(&books)
+
+	return &books
+}

@@ -16,12 +16,14 @@ import (
 )
 
 func GetAllBooks(c *gin.Context) {
-
-	response := dtos.Response{
-		Status: "Ok",
-		Data:   "Hello",
-		Error:  nil,
+	db, ok := c.MustGet("databaseConnection").(*gorm.DB)
+	if !ok {
+		panic("Can't connect to database")
 	}
+
+	bookRepository := repositories.NewBookrepository(db)
+
+	response := services.GetAllBooks(*bookRepository)
 
 	c.JSON(http.StatusOK, response)
 }
