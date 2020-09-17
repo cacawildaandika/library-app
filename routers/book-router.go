@@ -9,8 +9,9 @@ import (
 func InitializeBookRouter(rg *gin.RouterGroup) {
 	bookRouter := rg.Group("/book")
 
+	bookRouter.POST("/", handlers.CreateBook)
 	bookRouter.GET("/", handlers.GetAllBooks)
 	bookRouter.GET("/:id", handlers.GetBookById)
 	bookRouter.PUT("/:id", handlers.UpdateBook)
-	bookRouter.POST("/", handlers.CreateBook)
+	bookRouter.DELETE("/:id", handlers.DeleteBook)
 }

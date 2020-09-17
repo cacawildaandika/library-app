@@ -41,3 +41,13 @@ func (bookRepository *BookRepository) FindOne(id uint) (error, *models.Book) {
 
 	return nil, &book
 }
+
+func (bookRepository *BookRepository) Delete(book *models.Book) error {
+	err := bookRepository.db.Delete(&book).Error
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

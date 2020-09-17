@@ -82,3 +82,31 @@ func UpdateBook(id uint, updatedBook *models.Book, bookRepository *repositories.
 		Message: "Success save book",
 	}
 }
+
+func DeleteBook(id uint, bookRepository *repositories.BookRepository) dtos.Response {
+	err, selectedBook := bookRepository.FindOne(id)
+
+	if err != nil {
+		return dtos.Response{
+			Status:  "Error",
+			Error:   err.Error(),
+			Message: "Failed get book",
+		}
+	}
+
+	errDeleteBook := bookRepository.Delete(selectedBook)
+
+	if errDeleteBook != nil {
+		return dtos.Response{
+			Status:  "Error",
+			Error:   errDeleteBook.Error(),
+			Message: "Failed delete book",
+		}
+	}
+
+	return dtos.Response{
+		Status:  "Ok",
+		Data:    nil,
+		Message: "Success delete book",
+	}
+}

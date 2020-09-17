@@ -122,3 +122,30 @@ func UpdateBook(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+func DeleteBook(c *gin.Context) {
+	db, ok := c.MustGet("databaseConnection").(*gorm.DB)
+
+	if !ok {
+		panic("Can't connect to database")
+	}
+
+	id := c.Param("id")
+
+	idUint, err := strconv.ParseUint(id, 10, 32)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dtos.Response{
+			Status:  "Error",
+			Error:   err.Error(),
+			Message: "Invalid params. Please give numbers",
+		})
+		return
+	}
+
+	bookRepository := repositories.NewBookrepository(db)
+
+	response := services.DeleteBook(uint(idUint), bookRepository)
+
+	c.JSON(http.StatusNoContent, response)
+}
