@@ -84,3 +84,41 @@ func GetBookById(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+func UpdateBook(c *gin.Context) {
+	db, ok := c.MustGet("databaseConnection").(*gorm.DB)
+
+	if !ok {
+		panic("Can't connect to database")
+	}
+
+	bookRepository := repositories.NewBookrepository(db)
+
+	id := c.Param("id")
+
+	idUint, err := strconv.ParseUint(id, 10, 32)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dtos.Response{
+			Status:  "Error",
+			Error:   err.Error(),
+			Message: "Invalid params. Please give numbers",
+		})
+		return
+	}
+
+	var updatedBook models.Book
+
+	if err := c.ShouldBindJSON(&updatedBook); err != nil {
+		c.JSON(http.StatusBadRequest, dtos.Response{
+			Status:  "InvalidData",
+			Error:   err.Error(),
+			Message: "Invalid data",
+		})
+		return
+	}
+
+	response := services.UpdateBook(uint(idUint), &updatedBook, bookRepository)
+
+	c.JSON(http.StatusOK, response)
+}
