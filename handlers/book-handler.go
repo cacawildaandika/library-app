@@ -57,7 +57,7 @@ func CreateBook(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, response)
 	}
 
-	c.JSON(http.StatusOK, response)
+	c.JSON(http.StatusCreated, response)
 }
 
 func GetBookById(c *gin.Context) {
